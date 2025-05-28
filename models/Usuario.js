@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const db = require('../config/db');
+const db = require('../config/db'); // tu instancia Sequelize
 
-const Usuario = db.define('Usuario', {
+const Usuario = db.define('usuario', {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false
@@ -19,6 +19,8 @@ const Usuario = db.define('Usuario', {
     type: DataTypes.ENUM('ADMIN', 'EMPLEADO'),
     allowNull: false
   }
+}, {
+  tableName: 'usuarios' // 🔒 fuerza el nombre en minúscula y sin comillas dobles
 });
 
 module.exports = Usuario;

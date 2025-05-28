@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const Proveedor = require('./Proveedor');
 
-const Producto = db.define('Producto', {
+const Producto = db.define('producto', {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false
@@ -22,10 +22,12 @@ const Producto = db.define('Producto', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'Proveedors', // Sequelize pluraliza el nombre por defecto
+      model: 'proveedores', // 👈 nombre fijo y correcto del modelo relacionado
       key: 'id'
     }
   }
+}, {
+  tableName: 'productos' // 👈 nombre fijo para evitar errores y pluralizaciones raras
 });
 
 // Asociación después de definir el modelo

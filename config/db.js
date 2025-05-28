@@ -16,7 +16,12 @@ const sequelize = new Sequelize(
         rejectUnauthorized: false
       }
     },
-    logging: false
+    logging: false,
+    define: {
+      freezeTableName: true,   // evita nombres en plural automáticos
+      underscored: true,       // convierte camelCase -> snake_case (opcional)
+      timestamps: true         // crea created_at y updated_at automáticamente
+    }
   }
 );
 

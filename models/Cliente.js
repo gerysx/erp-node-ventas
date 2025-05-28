@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 
-const Cliente = db.define('Cliente', {
+const Cliente = db.define('cliente', {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false
@@ -14,6 +14,8 @@ const Cliente = db.define('Cliente', {
     type: DataTypes.STRING,
     allowNull: true
   }
+}, {
+  tableName: 'clientes' // 👈 nombre fijo y en minúscula
 });
 
 module.exports = Cliente;

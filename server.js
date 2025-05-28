@@ -21,8 +21,7 @@ const Producto = require('./models/Producto');
 
 // Asociaciones
 Factura.hasMany(DetalleFactura, { foreignKey: 'facturaId', as: 'detalles' });
-DetalleFactura.belongsTo(Factura, { foreignKey: 'facturaId', as: 'factura' });
-DetalleFactura.belongsTo(Producto, { foreignKey: 'productoId', as: 'producto' });
+
 
 
 // 5. Inicializar la app
