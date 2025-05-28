@@ -29,7 +29,12 @@ DetalleFactura.belongsTo(Producto, { foreignKey: 'productoId', as: 'producto' })
 const app = express();
 
 // 6. Middlewares
-app.use(cors());
+const corsOptions = {
+  origin: 'https://erp-ventas-frontend.onrender.com', // Tu frontend
+  credentials: true, // Si usas cookies o auth headers
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // 7. Rutas
