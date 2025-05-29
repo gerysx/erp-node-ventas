@@ -29,8 +29,10 @@ const app = express();
 
 // 6. Middlewares
 const corsOptions = {
-  origin: 'https://erp-ventas-frontend.onrender.com', // Tu frontend
-  credentials: true, // Si usas cookies o auth headers
+  origin: 'https://erp-ventas-frontend.onrender.com',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
