@@ -76,4 +76,4 @@ db.sync().then(() => {
 }).catch((err) => {
   console.error('❌ Error al conectar la BD:', err);
 });
-"// trigger redeploy" 
+// trigger redeploy" 
