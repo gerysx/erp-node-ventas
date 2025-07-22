@@ -3,13 +3,13 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-// 2. Cargar variables de entorno lo antes posible
-dotenv.config(); // DEBE IR AQUÍ
+// 2. Cargar variables de entorno
+dotenv.config();
 
 // 3. Conexión a la base de datos
 const db = require('./config/db');
 
-// 4. Cargar modelos (para que Sequelize los registre)
+// 4. Cargar modelos
 require('./models/Usuario');
 require('./models/Producto');
 require('./models/Cliente');
@@ -22,58 +22,49 @@ const Producto = require('./models/Producto');
 // Asociaciones
 Factura.hasMany(DetalleFactura, { foreignKey: 'facturaId', as: 'detalles' });
 
-
-
 // 5. Inicializar la app
 const app = express();
 
-// 6. Middlewares
+// 6. Configuración de CORS
 const corsOptions = {
   origin: 'https://erp-ventas-frontend.onrender.com',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+
+// ✅ Middleware para responder preflight OPTIONS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://erp-ventas-frontend.onrender.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 
 // 7. Rutas
-const authRoutes = require('./routes/auth.routes');
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/productos', require('./routes/producto.routes'));
+app.use('/api/clientes', require('./routes/cliente.routes'));
+app.use('/api/empleados', require('./routes/empleado.routes'));
+app.use('/api/proveedores', require('./routes/proveedor.routes'));
+app.use('/api/facturas', require('./routes/factura.routes'));
+app.use('/api/reportes', require('./routes/reporte.routes'));
+app.use('/api/usuarios', require('./routes/usuario.routes'));
 
-const productoRoutes = require('./routes/producto.routes');
-app.use('/api/productos', productoRoutes);
-
-const clienteRoutes = require('./routes/cliente.routes');
-app.use('/api/clientes', clienteRoutes);
-
-const empleadoRoutes = require('./routes/empleado.routes');
-app.use('/api/empleados', empleadoRoutes);
-
-const proveedorRoutes = require('./routes/proveedor.routes');
-app.use('/api/proveedores', proveedorRoutes);
-
-const facturaRoutes = require('./routes/factura.routes');
-app.use('/api/facturas', facturaRoutes);
-
-const reporteRoutes = require('./routes/reporte.routes');
-app.use('/api/reportes', reporteRoutes);
-
-const usuarioRoutes = require('./routes/usuario.routes');
-app.use('/api/usuarios', usuarioRoutes);
-
-
-// 8. Sincronizar base de datos y arrancar servidor
+// 8. Puerto dinámico para Render
 const PORT = process.env.PORT || 3000;
 
+// 9. Conectar DB y arrancar servidor
 db.sync().then(() => {
-  console.log('✅ Base de datos conectada');
+  console.log(' Base de datos conectada');
   app.listen(PORT, () => {
-    console.log(`🚀 Servidor activo en http://localhost:${PORT}`);
+    console.log(` Servidor activo en puerto ${PORT}`);
   });
-}).catch((err) => {
-  console.error('❌ Error al conectar la BD:', err);
+}).catch(err => {
+  console.error(' Error al conectar la BD:', err);
 });
-// trigger redeploy" 
