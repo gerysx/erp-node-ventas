@@ -269,20 +269,29 @@ exports.ventasPorProducto = async (req, res) => {
 
   try {
     const detalles = await DetalleFactura.findAll({
-      where: { productoId },
+      where: { productoId: Number(productoId) }, // ✅ asegurar tipo numérico
       include: [
         {
           model: Producto,
           as: 'producto',
-          attributes: ['id', 'nombre', 'precio', 'stock', 'descripcion', 'proveedorId', 'createdAt', 'updatedAt']
+          attributes: [
+            'id',
+            'nombre',
+            'precio',
+            'stock',
+            'descripcion',
+            'proveedorId',
+            'createdat',
+            'updatedat'
+          ]
         }
       ],
-      order: [['createdAt', 'DESC']]
+      order: [['createdat', 'DESC']] // ✅ usar el alias correcto
     });
 
-    res.json(detalles); // ✅ devuelve array de objetos bien formados
+    res.json(detalles);
   } catch (error) {
-    console.error(error);
+    console.error('❌ Error en ventasPorProducto:', error);
     res.status(500).json({ mensaje: 'Error al obtener ventas por producto' });
   }
 };
