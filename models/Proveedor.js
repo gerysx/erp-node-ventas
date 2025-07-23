@@ -12,8 +12,9 @@ const Proveedor = db.define('proveedor', {
   }
 }, {
   tableName: 'proveedores',
-  timestamps: true, 
-  underscored: true 
+  timestamps: true,
+  createdAt: 'created_at', 
+  updatedAt: 'updated_at'
 });
 
 module.exports = Proveedor;

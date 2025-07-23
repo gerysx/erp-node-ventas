@@ -21,20 +21,19 @@ const Producto = db.define('producto', {
   proveedorId: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    field: 'proveedorid',
+    field: 'proveedorid', 
     references: {
-      model: 'proveedores', // 👈 nombre fijo y correcto del modelo relacionado
+      model: 'proveedores',
       key: 'id'
     }
   }
 }, {
   tableName: 'productos',
   timestamps: true,
-  createdAt: 'createdat',
+  createdAt: 'createdat', 
   updatedAt: 'updatedat'
 });
 
-// Asociación después de definir el modelo
 Producto.belongsTo(Proveedor, {
   foreignKey: 'proveedorId',
   as: 'proveedor'
