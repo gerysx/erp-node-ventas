@@ -34,8 +34,6 @@ const Factura = db.define('factura', {
   updatedAt: 'updatedat'
 });
 
-// Relaciones
-Factura.belongsTo(Cliente, { foreignKey: 'clienteId', as: 'cliente' });
-Factura.belongsTo(Empleado, { foreignKey: 'empleadoId', as: 'empleado' });
+
 
 module.exports = Factura;

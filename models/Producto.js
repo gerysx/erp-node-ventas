@@ -23,22 +23,18 @@ const Producto = db.define('producto', {
     allowNull: true,
     field: 'proveedorid', // Nombre real en la DB
     references: {
-      model: 'proveedores', // ✅ Tabla correcta
+      model: 'proveedores', //  Tabla correcta
       key: 'id'
     }
   }
 }, {
   tableName: 'productos',     // Nombre exacto en la DB
-  freezeTableName: true,      // ✅ Evita pluralización errónea
+  freezeTableName: true,      //  Evita pluralización errónea
   timestamps: true,
-  createdAt: 'createdat',     // ✅ Sin guión bajo (como está en tu DB)
+  createdAt: 'createdat',     //  Sin guión bajo (como está en tu DB)
   updatedAt: 'updatedat'
 });
 
-// Relación correcta
-Producto.belongsTo(Proveedor, {
-  foreignKey: 'proveedorId',
-  as: 'proveedor'
-});
+
 
 module.exports = Producto;
