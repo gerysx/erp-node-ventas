@@ -21,7 +21,9 @@ const Usuario = db.define('usuario', {
   }
 }, {
   tableName: 'usuarios',
-  timestamps: false
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat'
 });
 
 module.exports = Usuario;
