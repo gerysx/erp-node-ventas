@@ -21,19 +21,21 @@ const Producto = db.define('producto', {
   proveedorId: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    field: 'proveedorid', 
+    field: 'proveedorid', // Nombre real en la DB
     references: {
-      model: 'proveedores',
+      model: 'proveedores', // ✅ Tabla correcta
       key: 'id'
     }
   }
 }, {
-  tableName: 'productos',
+  tableName: 'productos',     // Nombre exacto en la DB
+  freezeTableName: true,      // ✅ Evita pluralización errónea
   timestamps: true,
-  createdAt: 'createdat', 
+  createdAt: 'createdat',     // ✅ Sin guión bajo (como está en tu DB)
   updatedAt: 'updatedat'
 });
 
+// Relación correcta
 Producto.belongsTo(Proveedor, {
   foreignKey: 'proveedorId',
   as: 'proveedor'

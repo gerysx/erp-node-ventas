@@ -1,6 +1,9 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 
+const { DataTypes } = require('sequelize');
+const db = require('../config/db');
+
 const Proveedor = db.define('proveedor', {
   nombre: {
     type: DataTypes.STRING,
@@ -11,10 +14,12 @@ const Proveedor = db.define('proveedor', {
     allowNull: true
   }
 }, {
-  tableName: 'proveedores',
+  tableName: 'proveedores',   // Nombre exacto en la DB
+  freezeTableName: true,      // ✅ Evita que Sequelize lo pluralice automáticamente
   timestamps: true,
-  createdAt: 'created_at', 
+  createdAt: 'created_at',    // ✅ Formato en la DB
   updatedAt: 'updated_at'
 });
 
 module.exports = Proveedor;
+

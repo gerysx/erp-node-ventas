@@ -70,9 +70,9 @@ app.use('/api/usuarios', require('./routes/usuario.routes'));
 const PORT = process.env.PORT || 3000;
 
 // 9. Conectar DB y arrancar servidor
-db.sync()
+db.sync({ alter: true }) // 👈 Sincronización automática
   .then(() => {
-    console.log('✅ Base de datos conectada');
+    console.log('✅ Base de datos sincronizada');
     app.listen(PORT, () => {
       console.log(`🚀 Servidor activo en puerto ${PORT}`);
     });
