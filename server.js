@@ -19,7 +19,6 @@ require('./models/Empleado');
 require('./models/Proveedor');
 const Factura = require('./models/Factura');
 const DetalleFactura = require('./models/DetalleFactura');
-const Producto = require('./models/Producto');
 
 // Asociaciones
 Factura.hasMany(DetalleFactura, { foreignKey: 'facturaId', as: 'detalles' });
@@ -27,18 +26,35 @@ Factura.hasMany(DetalleFactura, { foreignKey: 'facturaId', as: 'detalles' });
 // 5. Inicializar la app
 const app = express();
 
-// 6. Middlewares globales
-app.use(helmet()); // Seguridad básica
-app.use(morgan('dev')); // Logs HTTP
+// ✅ Middlewares de seguridad y utilidades
+app.use(helmet()); // Seguridad: añade cabeceras HTTP seguras
+app.use(express.json()); // Parsear JSON
 
-// ✅ Configuración CORS
+// ✅ CORS configurado para tu frontend en Render
+const allowedOrigins = [
+  'https://erp-ventas-frontend.onrender.com', // Producción
+  'http://localhost:4200' // Desarrollo local
+];
+
 app.use(cors({
-  origin: 'https://erp-ventas-frontend.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS no permitido'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization'
 }));
 
-app.use(express.json());
+// ✅ Middleware para manejar preflight requests
+app.options('*', cors());
+
+// ✅ Logging solo en desarrollo
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // 7. Rutas
 app.use('/api/auth', require('./routes/auth.routes'));
@@ -50,15 +66,10 @@ app.use('/api/facturas', require('./routes/factura.routes'));
 app.use('/api/reportes', require('./routes/reporte.routes'));
 app.use('/api/usuarios', require('./routes/usuario.routes'));
 
-// 8. Ruta básica para test
-app.get('/', (req, res) => {
-  res.json({ message: '✅ API ERP funcionando correctamente' });
-});
-
-// 9. Puerto dinámico
+// 8. Puerto dinámico
 const PORT = process.env.PORT || 3000;
 
-// 10. Conectar DB y arrancar servidor
+// 9. Conectar DB y arrancar servidor
 db.sync()
   .then(() => {
     console.log('✅ Base de datos conectada');
