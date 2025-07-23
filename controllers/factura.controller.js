@@ -15,11 +15,38 @@ const formatoEuro = new Intl.NumberFormat("es-ES", {
 });
 
 exports.listar = async (req, res) => {
-  const datos = await Factura.findAll({
-    include: ["cliente", "empleado"],
-  });
-  res.json(datos);
+  try {
+    const facturas = await Factura.findAll({
+      include: [
+        { model: Cliente, as: "cliente", attributes: ["id", "nombre"] },
+        { model: Empleado, as: "empleado", attributes: ["id", "nombre"] },
+        {
+          model: DetalleFactura,
+          as: "detalles",
+          attributes: ["cantidad", "precioUnitario"],
+        },
+      ],
+      order: [["fecha", "DESC"]],
+    });
+
+    const resultado = facturas.map((f) => ({
+      id: f.id,
+      fecha: f.fecha,
+      cliente: f.cliente,
+      empleado: f.empleado,
+      total: f.detalles.reduce(
+        (acc, d) => acc + d.cantidad * parseFloat(d.precioUnitario),
+        0
+      ),
+    }));
+
+    res.json(resultado);
+  } catch (error) {
+    console.error("Error al listar facturas:", error);
+    res.status(500).json({ mensaje: "Error al listar facturas" });
+  }
 };
+
 
 exports.obtener = async (req, res) => {
   const factura = await Factura.findByPk(req.params.id, {
