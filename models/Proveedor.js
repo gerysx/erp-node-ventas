@@ -1,6 +1,3 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/db'); // instancia de Sequelize
-
 const Proveedor = db.define('proveedor', {
   nombre: {
     type: DataTypes.STRING,
@@ -12,9 +9,8 @@ const Proveedor = db.define('proveedor', {
   }
 }, {
   tableName: 'proveedores',
-  timestamps: true,
-  createdAt: 'createdat',
-  updatedAt: 'updatedat'
+  timestamps: true, 
+  underscored: true 
 });
 
 module.exports = Proveedor;
