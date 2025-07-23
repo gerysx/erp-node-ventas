@@ -11,6 +11,7 @@ const Factura = db.define('factura', {
   clienteId: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    field: 'clienteid',
     references: {
       model: 'clientes', // 👈 debe coincidir con tableName en Cliente.js
       key: 'id'
@@ -19,13 +20,17 @@ const Factura = db.define('factura', {
   empleadoId: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    field: 'empleadoid',
     references: {
       model: 'empleados', // 👈 debe coincidir con tableName en Empleado.js
       key: 'id'
     }
   }
 }, {
-  tableName: 'facturas' // 👈 nombre fijo de tabla
+  tableName: 'facturas',
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat'
 });
 
 // Relaciones

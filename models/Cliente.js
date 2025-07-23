@@ -15,7 +15,10 @@ const Cliente = db.define('cliente', {
     allowNull: true
   }
 }, {
-  tableName: 'clientes' // 👈 nombre fijo y en minúscula
+  tableName: 'clientes',
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat'
 });
 
 module.exports = Cliente;

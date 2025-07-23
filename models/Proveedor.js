@@ -11,7 +11,10 @@ const Proveedor = db.define('proveedor', {
     allowNull: true
   }
 }, {
-  tableName: 'proveedores' // 👈 nombre fijo, plural y en minúscula
+  tableName: 'proveedores',
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat'
 });
 
 module.exports = Proveedor;

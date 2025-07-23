@@ -21,13 +21,17 @@ const Producto = db.define('producto', {
   proveedorId: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    field: 'proveedorid',
     references: {
       model: 'proveedores', // 👈 nombre fijo y correcto del modelo relacionado
       key: 'id'
     }
   }
 }, {
-  tableName: 'productos' // 👈 nombre fijo para evitar errores y pluralizaciones raras
+  tableName: 'productos',
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat'
 });
 
 // Asociación después de definir el modelo

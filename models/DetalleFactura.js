@@ -10,11 +10,13 @@ const DetalleFactura = db.define('detallefactura', {
   },
   precioUnitario: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
+    allowNull: false,
+    field: 'preciounitario',
   },
   facturaId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'facturaid',
     references: {
       model: 'facturas', // 👈 debe coincidir con tableName de Factura
       key: 'id'
@@ -23,13 +25,17 @@ const DetalleFactura = db.define('detallefactura', {
   productoId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'productoid',
     references: {
       model: 'productos', // 👈 debe coincidir con tableName de Producto
       key: 'id'
     }
   }
 }, {
-  tableName: 'detallefacturas'
+  tableName: 'detallefacturas',
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat'
 });
 
 // Relaciones

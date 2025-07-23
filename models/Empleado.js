@@ -16,7 +16,10 @@ const Empleado = db.define('empleado', {
     allowNull: true
   }
 }, {
-  tableName: 'empleados' // 👈 nombre fijo, sin riesgo de duplicación
+  tableName: 'empleados',
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat' 
 });
 
 module.exports = Empleado;
