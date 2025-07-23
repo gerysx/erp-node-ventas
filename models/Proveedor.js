@@ -1,3 +1,6 @@
+const { DataTypes } = require('sequelize');
+const db = require('../config/db');
+
 const Proveedor = db.define('proveedor', {
   nombre: {
     type: DataTypes.STRING,
