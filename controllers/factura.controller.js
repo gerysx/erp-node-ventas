@@ -222,7 +222,6 @@ exports.descargarPDF = async (req, res) => {
 exports.ventas = async (req, res) => {
   try {
     const { clienteId, empleadoId } = req.query;
-
     const where = {};
 
     if (clienteId) where.clienteId = clienteId;
@@ -240,18 +239,26 @@ exports.ventas = async (req, res) => {
           model: Empleado,
           as: 'empleado',
           attributes: ['id', 'nombre']
+        },
+        {
+          model: DetalleFactura,
+          as: 'detalles', // ✅ ahora incluimos los detalles
+          attributes: ['cantidad', 'precioUnitario']
         }
       ],
       order: [['fecha', 'DESC']]
     });
 
-    const resultado = facturas.map(f => ({
-      id: f.id,
-      fecha: f.fecha,
-      total: f.detalles?.reduce((acc, d) => acc + d.cantidad * d.precioUnitario, 0) || 0,
-      cliente: f.cliente,
-      empleado: f.empleado
-    }));
+    const resultado = facturas.map(f => {
+      const total = f.detalles.reduce((acc, d) => acc + d.cantidad * parseFloat(d.precioUnitario), 0);
+      return {
+        id: f.id,
+        fecha: f.fecha,
+        total,
+        cliente: f.cliente,
+        empleado: f.empleado
+      };
+    });
 
     res.json(resultado);
   } catch (err) {
@@ -269,27 +276,29 @@ exports.ventasPorProducto = async (req, res) => {
 
   try {
     const detalles = await DetalleFactura.findAll({
-      where: { productoId: Number(productoId) }, // ✅ asegurar tipo numérico
+      where: { productoId: Number(productoId) },
       include: [
         {
           model: Producto,
           as: 'producto',
           attributes: [
-            'id',
-            'nombre',
-            'precio',
-            'stock',
-            'descripcion',
-            'proveedorId',
-            'createdat',
-            'updatedat'
+            'id', 'nombre', 'precio', 'stock', 'descripcion', 'proveedorId', 'createdat', 'updatedat'
           ]
         }
       ],
-      order: [['createdat', 'DESC']] // ✅ usar el alias correcto
+      order: [['createdat', 'DESC']] // ✅ correcto alias
     });
 
-    res.json(detalles);
+    // ✅ Calcular estadísticas agregadas
+    const totalCantidad = detalles.reduce((sum, d) => sum + d.cantidad, 0);
+    const totalVentas = detalles.reduce((sum, d) => sum + d.cantidad * parseFloat(d.precioUnitario), 0);
+
+    res.json({
+      producto: detalles[0]?.producto || null,
+      totalCantidad,
+      totalVentas,
+      detalles
+    });
   } catch (error) {
     console.error('❌ Error en ventasPorProducto:', error);
     res.status(500).json({ mensaje: 'Error al obtener ventas por producto' });
