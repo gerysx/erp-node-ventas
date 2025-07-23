@@ -17,6 +17,7 @@ const Cliente = db.define('cliente', {
 }, {
   tableName: 'clientes',
   timestamps: true,
+  freezeTableName: true,
   createdAt: 'createdat',
   updatedAt: 'updatedat'
 });

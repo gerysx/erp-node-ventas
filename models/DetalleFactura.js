@@ -33,6 +33,7 @@ const DetalleFactura = db.define('detallefactura', {
   }
 }, {
   tableName: 'detallefacturas',
+  freezeTableName: true,
   timestamps: true,
   createdAt: 'createdat',
   updatedAt: 'updatedat'

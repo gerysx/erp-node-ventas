@@ -21,6 +21,7 @@ const Usuario = db.define('usuario', {
   }
 }, {
   tableName: 'usuarios',
+  freezeTableName: true,
   timestamps: true,
   createdAt: 'createdat',
   updatedAt: 'updatedat'

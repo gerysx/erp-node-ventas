@@ -18,6 +18,7 @@ const Empleado = db.define('empleado', {
 }, {
   tableName: 'empleados',
   timestamps: true,
+  freezeTableName: true,
   createdAt: 'createdat',
   updatedAt: 'updatedat' 
 });

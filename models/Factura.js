@@ -28,6 +28,7 @@ const Factura = db.define('factura', {
   }
 }, {
   tableName: 'facturas',
+  freezeTableName: true,
   timestamps: true,
   createdAt: 'createdat',
   updatedAt: 'updatedat'
