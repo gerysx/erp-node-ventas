@@ -1,21 +1,18 @@
-const { QueryTypes } = require('sequelize');
-const db = require('../config/db');
-
 exports.ventasPorMes = async (req, res) => {
   try {
     const resultados = await db.query(`
       SELECT 
-        DATE_FORMAT(f.fecha, '%Y-%m') AS mes,
-        SUM(d.cantidad * d.precioUnitario) AS total
-      FROM Facturas f
-      JOIN DetalleFacturas d ON d.facturaId = f.id
+        TO_CHAR(f.fecha, 'YYYY-MM') AS mes,
+        SUM(d.cantidad * d.preciounitario) AS total
+      FROM facturas f
+      JOIN detallefacturas d ON d.facturaid = f.id
       GROUP BY mes
       ORDER BY mes DESC
     `, { type: QueryTypes.SELECT });
 
     res.json(resultados);
   } catch (error) {
-    console.error('Error en reporte:', error);
+    console.error('❌ Error en reporte:', error);
     res.status(500).json({ mensaje: 'Error al generar el reporte', error });
   }
 };
@@ -29,22 +26,21 @@ exports.facturasPorCliente = async (req, res) => {
         f.id,
         f.fecha,
         e.nombre AS empleado,
-        SUM(d.cantidad * d.precioUnitario) AS total
-      FROM Facturas f
-      JOIN Empleados e ON f.empleadoId = e.id
-      JOIN DetalleFacturas d ON d.facturaId = f.id
-      WHERE f.clienteId = ?
+        SUM(d.cantidad * d.preciounitario) AS total
+      FROM facturas f
+      JOIN empleados e ON f.empleadoid = e.id
+      JOIN detallefacturas d ON d.facturaid = f.id
+      WHERE f.clienteid = $1
       GROUP BY f.id, f.fecha, empleado
       ORDER BY f.fecha DESC
     `, {
-      type: db.QueryTypes.SELECT,
-      replacements: [clienteId]
+      type: QueryTypes.SELECT,
+      bind: [clienteId]
     });
 
     res.json(resultados);
   } catch (error) {
-    console.error('Error reporte por cliente:', error);
+    console.error('❌ Error reporte por cliente:', error);
     res.status(500).json({ mensaje: 'Error al generar el reporte', error });
   }
 };
-
