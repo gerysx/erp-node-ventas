@@ -20,7 +20,8 @@ const Usuario = db.define('usuario', {
     allowNull: false
   }
 }, {
-  tableName: 'usuarios' // 🔒 fuerza el nombre en minúscula y sin comillas dobles
+  tableName: 'usuarios',
+  timestamps: false
 });
 
 module.exports = Usuario;
